@@ -1,0 +1,137 @@
+# Sveltia CMS — back-office d'édition des fiches (cf. docs/ARCHITECTURE.md §5).
+# UI d'édition navigateur, commit dans Git, sans serveur. Rôles = permissions du repo.
+
+backend:
+  name: github
+  repo: CODEheures/concensus
+  branch: main
+  # OAuth délégué à un Cloudflare Worker « sveltia-cms-auth ».
+  # >>> REMPLACER par l'URL de TON worker une fois déployé : <<<
+  base_url: https://REMPLACER-PAR-TON-WORKER.workers.dev
+
+# Permet de tester le CMS en local sans le worker (via un proxy git) :
+#   npx @sveltia/cms-proxy-server   (puis ouvrir http://localhost:4321/admin/)
+local_backend: true
+
+# Workflow éditorial : colonnes brouillon -> en revue -> prêt, et ouverture de PR.
+publish_mode: editorial_workflow
+
+media_folder: public/uploads
+public_folder: /uploads
+
+slug:
+  encoding: unicode
+  clean_accents: true
+  lowercase: true
+
+collections:
+  - name: fiches
+    label: Fiches
+    label_singular: Fiche
+    folder: src/content/fiches
+    extension: mdx
+    format: frontmatter
+    create: true
+    delete: false
+    identifier_field: titre
+    slug: '{{slug}}'
+    preview_path: 'fiches/{{slug}}'
+    fields:
+      - { name: titre, label: Titre, widget: string }
+      - { name: chapo, label: Chapô, widget: text }
+
+      - name: fil
+        label: Fil d'Ariane
+        widget: object
+        fields:
+          - { name: ministere, label: Ministère, widget: string }
+          - { name: theme, label: Thème, widget: string }
+          - { name: sousTheme, label: Sous-thème, widget: string }
+
+      - { name: tags, label: Tags, widget: list, default: [] }
+
+      - name: statut
+        label: Statut éditorial
+        widget: select
+        default: brouillon
+        options:
+          - brouillon
+          - en_revue
+          - publie
+          - a_reviser
+          - abouti
+          - en_sommeil
+          - archive
+
+      - name: origine
+        label: Origine
+        widget: object
+        fields:
+          - { name: elaboreeAvec, label: Élaborée avec, widget: string, required: false }
+          - { name: revueCharte, label: Revue selon la charte, widget: boolean, default: false }
+
+      - name: keyfact
+        label: Constat-choc
+        widget: object
+        fields:
+          - { name: chiffre, label: Chiffre, widget: string }
+          - { name: texte, label: Texte, widget: text }
+          - { name: source, label: Source (n°), widget: number, value_type: int, required: false }
+
+      - name: comparatif
+        label: Comparatif des leviers
+        widget: list
+        label_singular: Ligne
+        summary: '{{fields.pays}}'
+        fields:
+          - { name: pays, label: Pays, widget: string }
+          - { name: sousTitre, label: Sous-titre, widget: string, required: false }
+          - { name: tuesParM, label: Tués / million, widget: string }
+          - { name: levier, label: Levier d'infrastructure, widget: text }
+          - name: sources
+            label: Sources (n°)
+            widget: list
+            required: false
+            field: { name: source, label: N°, widget: number, value_type: int }
+          - name: role
+            label: Rôle
+            widget: select
+            default: autre
+            options: [france, reference, autre]
+
+      - name: mesures
+        label: Mesures évaluées (seeds Pol.is)
+        widget: list
+        label_singular: Mesure
+        summary: '{{fields.id}} — {{fields.texte}}'
+        fields:
+          - { name: id, label: Identifiant (A, B, C…), widget: string }
+          - { name: texte, label: Texte, widget: text }
+          - name: preuve
+            label: Niveau de preuve
+            widget: select
+            options: [eprouve, emergent]
+          - { name: polisCommentId, label: Pol.is comment-id, widget: number, value_type: int, required: false }
+
+      - name: sources
+        label: Sources
+        widget: list
+        label_singular: Source
+        summary: '[{{fields.n}}] {{fields.texte}}'
+        fields:
+          - { name: n, label: N°, widget: number, value_type: int }
+          - { name: texte, label: Texte, widget: text }
+          - { name: url, label: URL, widget: string, required: false }
+
+      - name: polis
+        label: Pol.is
+        widget: object
+        fields:
+          - { name: conversationId, label: Conversation ID (requis pour publier), widget: string }
+          - { name: reportId, label: Report ID (export réception), widget: string, required: false }
+          - { name: pageId, label: Page ID, widget: string, required: false }
+
+      # Corps « approfondi » en MDX BRUT (importe des composants + JSX).
+      # Widget `text` volontaire : pas d'éditeur rich-text -> aucun risque de
+      # corrompre les imports/composants. À éditer avec précaution.
+      - { name: body, label: Corps MDX (avancé — brut), widget: text, required: false }
