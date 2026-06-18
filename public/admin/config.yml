@@ -9,8 +9,8 @@ backend:
   # >>> REMPLACER par l'URL de TON worker une fois déployé : <<<
   base_url: https://REMPLACER-PAR-TON-WORKER.workers.dev
 
-# Permet de tester le CMS en local sans le worker (via un proxy git) :
-#   npx @sveltia/cms-proxy-server   (puis ouvrir http://localhost:4321/admin/)
+# Permet de tester le CMS en local sans le worker (proxy git Decap-compatible) :
+#   npx decap-server   (port 8081) puis ouvrir http://localhost:4321/admin/
 local_backend: true
 
 # Workflow éditorial : colonnes brouillon -> en revue -> prêt, et ouverture de PR.
