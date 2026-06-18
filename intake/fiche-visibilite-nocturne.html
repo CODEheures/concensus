@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visibilité nocturne — Fiche benchmark</title>
+<style>
+  /* =========================================================================
+     GABARIT DE FICHE-BENCHMARK v3 — réutilisable pour tous les sujets.
+     Colonne gauche : contenu, double mode de lecture (rapide / approfondi).
+     Colonne droite : conversation Pol.is (RÉPLIQUE de démo, données fictives),
+     sticky sur desktop, remontée en haut sur mobile.
+     À l'intégration réelle : remplacer le bloc .polis par l'embed Pol.is.
+     ========================================================================= */
+  :root{
+    --encre:#1a2230; --encre-doux:#51607a; --papier:#f7f8fa; --carte:#fff;
+    --trait:#dfe3ea; --france:#c0392b; --reference:#1f7a5a; --surligne:#eef2f7;
+    --eprouve-bg:#e8f3ee; --eprouve-fg:#1f7a5a;
+    --emergent-bg:#fdf3e3; --emergent-fg:#b7791f;
+    --grpA:#1f9e75; --grpB:#d85a30; --moi:#185fa5;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--papier);color:var(--encre);font-family:var(--sans);line-height:1.6;font-size:16px;}
+  a{color:inherit;}
+  .layout{max-width:1120px;margin:0 auto;padding:0 20px 80px;display:grid;
+    grid-template-columns:1fr 380px;gap:38px;align-items:start;}
+  .main{min-width:0;}
+  .aside{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;}
+  .aside::-webkit-scrollbar{width:8px;}
+  .aside::-webkit-scrollbar-thumb{background:var(--trait);border-radius:999px;}
+ 
+  .breadcrumb{font-size:13px;color:var(--encre-doux);padding:22px 0 0;}
+  .breadcrumb .sep{margin:0 6px;opacity:.5;}
+  .tags{margin:14px 0 0;}
+  .tag{display:inline-block;font-size:12px;color:var(--encre-doux);background:var(--surligne);
+    border:1px solid var(--trait);border-radius:999px;padding:3px 11px;margin:0 6px 6px 0;}
+  h1{font-family:var(--serif);font-size:32px;line-height:1.18;margin:16px 0 6px;}
+  .chapo{font-size:18px;color:var(--encre-doux);margin:0 0 4px;}
+ 
+  .modebar{display:flex;align-items:center;gap:10px;margin:22px 0 6px;padding:10px 14px;
+    background:var(--carte);border:1px solid var(--trait);border-radius:10px;}
+  .modebar .lbl{font-size:13px;color:var(--encre-doux);margin-right:auto;}
+  .modebtn{font-size:13px;font-family:var(--sans);cursor:pointer;border:1px solid var(--trait);
+    background:var(--papier);color:var(--encre-doux);border-radius:7px;padding:6px 12px;}
+  .modebtn.active{background:var(--encre);color:#fff;border-color:var(--encre);}
+ 
+  .keyfact{background:var(--carte);border:1px solid var(--trait);border-left:4px solid var(--france);
+    border-radius:10px;padding:18px 20px;margin:18px 0;}
+  .keyfact .big{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.1;}
+  .keyfact .txt{font-size:15px;color:var(--encre-doux);margin-top:4px;}
+ 
+  h2{font-family:var(--serif);font-size:22px;margin:40px 0 4px;padding-top:16px;border-top:2px solid var(--encre);}
+  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--encre-doux);font-weight:600;}
+  p{margin:13px 0;}
+ 
+  .rank{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0;}
+  .rank .cell{flex:1 1 120px;background:var(--carte);border:1px solid var(--trait);border-radius:10px;padding:14px 16px;}
+  .rank .num{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1;}
+  .rank .lab{font-size:12.5px;color:var(--encre-doux);margin-top:6px;}
+  .rank .france .num{color:var(--france);} .rank .ref .num{color:var(--reference);}
+ 
+  .more{display:none;} body.deep .more{display:block;}
+  .more-inline{display:none;} body.deep .more-inline{display:inline;}
+  .foldhint{font-size:12.5px;color:var(--encre-doux);font-style:italic;margin-top:6px;}
+  body.deep .foldhint{display:none;}
+ 
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.5px;background:var(--carte);}
+  caption{text-align:left;font-size:12.5px;color:var(--encre-doux);margin-bottom:8px;}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--trait);vertical-align:top;}
+  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--encre-doux);border-bottom:2px solid var(--encre);}
+  tbody tr.france{background:#fdf3f2;} tbody tr.ref{background:#f0f8f4;}
+  td .pays{font-weight:600;}
+  .caveat{background:var(--surligne);border:1px solid var(--trait);border-radius:10px;padding:16px 18px;margin:22px 0;font-size:14px;}
+ 
+  .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;border-radius:5px;padding:2px 8px;vertical-align:middle;}
+  .badge.eprouve{background:var(--eprouve-bg);color:var(--eprouve-fg);}
+  .badge.emergent{background:var(--emergent-bg);color:var(--emergent-fg);}
+ 
+  .sources{font-size:13px;color:var(--encre-doux);} .sources ol{padding-left:18px;} .sources li{margin-bottom:7px;}
+  .charte{margin-top:34px;font-size:12.5px;color:var(--encre-doux);border-top:1px solid var(--trait);padding-top:16px;}
+ 
+  /* ---- Mesures évaluées + indicateur de réception communautaire ---- */
+  .measure{background:var(--carte);border:1px solid var(--trait);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+  .measure .mhead{display:flex;align-items:flex-start;gap:10px;}
+  .measure .mid{font-family:var(--serif);font-weight:700;color:var(--encre-doux);flex:0 0 auto;font-size:15px;}
+  .measure .mtxt{font-size:14.5px;line-height:1.45;flex:1;}
+  .measure .mhead .badge{flex:0 0 auto;margin-top:2px;}
+  /* La barre de réception : axe clivage(gauche) → consensus(droite), neutre */
+  .recept{margin-top:11px;}
+  .recept .rlabel{font-size:12.5px;color:var(--encre-doux);margin:0 0 6px;}
+  .recept .rlabel strong{color:var(--encre);font-weight:600;}
+  .raxis{position:relative;height:8px;background:linear-gradient(90deg,#f0d6cf,#eef2f7,#d8ece2);border-radius:999px;}
+  .rmark{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;background:var(--carte);
+    border:2px solid var(--encre);transform:translateX(-50%);}
+  .rends{display:flex;justify-content:space-between;font-size:11px;color:var(--encre-doux);margin-top:5px;}
+  .rpending{font-size:12.5px;color:var(--encre-doux);font-style:italic;margin-top:9px;
+    background:var(--surligne);border:1px dashed var(--trait);border-radius:8px;padding:9px 11px;}
+  .rcount{font-size:11.5px;color:var(--encre-doux);margin-top:6px;}
+ 
+  /* ============ BLOC POLIS (réplique) ============ */
+  .polis{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(20,30,50,.05);}
+  .polis .ptitle{font-size:13px;color:var(--encre-doux);display:flex;align-items:center;gap:6px;}
+  .polis .pdemo{margin-left:auto;font-size:11px;background:var(--surligne);padding:2px 8px;border-radius:999px;}
+  .polis h3{margin:8px 0 2px;font-size:16px;}
+  .polis .pintro{font-size:12.5px;color:var(--encre-doux);margin:0 0 12px;}
+  .pcard{border:1px solid var(--trait);border-radius:10px;padding:14px;}
+  .pcard .pcap{display:flex;justify-content:space-between;font-size:11.5px;color:var(--encre-doux);margin-bottom:8px;}
+  .pstmt{font-size:15px;line-height:1.45;margin:0 0 6px;min-height:46px;}
+  .pmeta{font-size:11.5px;color:var(--encre-doux);margin:0 0 14px;}
+  .pbtns{display:flex;gap:6px;}
+  .pb{flex:1;padding:9px 4px;border-radius:7px;border:1px solid var(--trait);background:var(--papier);
+    color:var(--encre);cursor:pointer;font-size:13px;font-family:var(--sans);}
+  .pb:hover{border-color:var(--encre-doux);}
+  .padd{display:flex;gap:6px;margin-top:12px;border-top:1px solid var(--trait);padding-top:12px;}
+  .padd input{flex:1;font-size:12.5px;border:1px solid var(--trait);border-radius:7px;padding:7px 9px;font-family:var(--sans);}
+  .padd button{padding:0 12px;border:1px solid var(--trait);border-radius:7px;background:var(--papier);cursor:pointer;}
+  .pbar-wrap{margin:10px 0 16px;}
+  .pbar{height:5px;background:var(--surligne);border-radius:999px;overflow:hidden;}
+  .pbar > span{display:block;height:100%;width:16%;background:var(--moi);transition:width .3s;}
+  .pprog{font-size:11.5px;color:var(--encre-doux);margin:6px 0 0;}
+  .pviz-title{font-size:13.5px;font-weight:600;margin:4px 0 2px;}
+  .pviz-sub{font-size:12px;color:var(--encre-doux);margin:0 0 10px;}
+  .pviz-wrap{background:var(--surligne);border-radius:10px;padding:10px;}
+  .plegend{display:flex;gap:14px;justify-content:center;margin-top:6px;font-size:11.5px;color:var(--encre-doux);}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:0px;}
+  .pcons{margin-top:14px;border:1px solid var(--trait);border-radius:10px;padding:12px 14px;}
+  .pcons .lab{font-size:12.5px;font-weight:600;margin:0 0 6px;}
+  .pcons .txt{font-size:12.5px;color:var(--encre-doux);margin:0;line-height:1.5;}
+ 
+  /* En desktop : le vote est dans l'aside sticky; la copie en flux est masquée */
+  .polis-flow{display:none;}
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr;gap:0;}
+    h1{font-size:27px;}
+    /* En mobile : on masque l'aside et on affiche la copie placée
+       juste après le constat-choc, avant le détail */
+    .aside{display:none;}
+    .polis-flow{display:block;margin:18px 0 8px;}
+  }
+</style>
+</head>
+<body class="fast">
+<div class="layout">
+ 
+  <!-- ============ COLONNE PRINCIPALE ============ -->
+  <div class="main">
+    <nav class="breadcrumb">
+      <a href="#">Mobilité &amp; Transports</a><span class="sep">›</span>
+      <a href="#">Sécurité routière</a><span class="sep">›</span><span>Visibilité nocturne</span>
+    </nav>
+    <div class="tags">
+      <span class="tag">nuit</span><span class="tag">infrastructure</span>
+      <span class="tag">visibilité</span><span class="tag">autoroute</span>
+    </div>
+    <h1>Voir la route la nuit, et sous la pluie</h1>
+    <p class="chapo">Éclairage, marquage et balisage des voies rapides : ce que font
+      les pays qui meurent le moins la nuit, et où se situe la France.</p>
+ 
+    <div class="modebar">
+      <span class="lbl">Mode de lecture</span>
+      <button class="modebtn active" id="btnFast">Rapide</button>
+      <button class="modebtn" id="btnDeep">Approfondi</button>
+    </div>
+ 
+    <div class="keyfact">
+      <div class="big">≈ 46 % des morts, 10 % du trafic</div>
+      <div class="txt">Près de la moitié des décès routiers surviennent la nuit, qui
+        ne représente pourtant qu'un dixième de la circulation (ONISR, 2023-2024).<sup>[1]</sup></div>
+    </div>
+ 
+    <!-- Emplacement de la copie MOBILE du vote (remplie par clonage JS).
+         Visible uniquement < 900px, juste après le constat-choc. -->
+    <div class="polis-flow" id="polisFlow"></div>
+ 
+    <div class="more">
+      <div class="eyebrow">Le constat, en détail</div>
+      <h2>La nuit, et surtout la pluie</h2>
+      <div class="rank">
+        <div class="cell france"><div class="num">48</div><div class="lab">France — tués / million hab. (2024)</div></div>
+        <div class="cell ref"><div class="num">20</div><div class="lab">Suède — la plus sûre de l'UE</div></div>
+        <div class="cell"><div class="num">44</div><div class="lab">Moyenne UE</div></div>
+      </div>
+      <p>Le risque d'accident mortel au crépuscule est environ <strong>sept fois</strong>
+        supérieur au risque diurne.<sup>[2]</sup> Et l'on estime qu'environ
+        <strong>la moitié des accidents</strong> surviennent la nuit par temps de pluie —
+        des conditions pourtant rares —, lorsque le film d'eau renvoie la lumière des
+        phares au lieu de révéler la ligne blanche.<sup>[3]</sup> Hors agglomération,
+        <strong>75 %</strong> des piétons tués le sont la nuit.<sup>[1]</sup></p>
+      <p>L'expérience française recoupe ces chiffres : autoroutes très largement non
+        éclairées, séparation centrale parfois sans dispositif rétroréfléchissant,
+        marquage au sol qui peut s'effacer visuellement sous la pluie.</p>
+      <div class="caveat"><strong>Ce que ces chiffres prouvent, et ce qu'ils ne prouvent
+        pas.</strong> Ils établissent que la nuit est plus mortelle. Ils n'isolent pas la
+        part de l'infrastructure de celle du comportement (fatigue, alcool, vitesse), qui
+        pèse aussi lourd la nuit. Le benchmark ci-dessous regarde des pays ayant agi
+        spécifiquement sur l'infrastructure, et ce qu'ils ont mesuré.</div>
+    </div>
+    <p class="foldhint">Passez en « Approfondi » pour les chiffres détaillés, le
+      comparatif et les sources.</p>
+ 
+    <div class="eyebrow">Ce qui se fait ailleurs</div>
+    <h2>Comparatif des leviers</h2>
+    <table>
+      <caption>Mortalité par million d'habitants (2024) et mesures documentées.</caption>
+      <thead><tr><th>Pays</th><th>Tués/M</th><th>Levier d'infrastructure</th></tr></thead>
+      <tbody>
+        <tr class="ref"><td><span class="pays">Suède</span><br><small>Vision Zero</small></td><td>20</td>
+          <td>Routes « 2+1 » à barrière médiane câble : ~1 500 km, ~145 vies sauvées sur
+            10 ans ; jusqu'à <strong>−80 %</strong> de tués sur les axes réaménagés.<sup>[4][5][6]</sup></td></tr>
+        <tr><td><span class="pays">Danemark</span></td><td>24</td>
+          <td>2ᵉ pays le plus sûr de l'UE ; aménagement et séparation des usagers vulnérables.<sup>[7]</sup></td></tr>
+        <tr><td><span class="pays">Pays-Bas</span></td><td>—</td>
+          <td>Séparation physique systématique des usagers vulnérables ; pilote de marquage luminescent.<sup>[8]</sup></td></tr>
+        <tr class="france"><td><span class="pays">France</span></td><td>48</td>
+          <td>Au-dessus de la moyenne UE, baisse plus lente sur la décennie. Autoroutes peu
+            éclairées, marquage « pluie » non généralisé.<sup>[7][9]</sup></td></tr>
+      </tbody>
+    </table>
+    <div class="more">
+      <p>Un standard existe : la norme européenne <strong>EN 1436</strong> distingue le
+        marquage Type II, conçu pour rester rétroréfléchissant sous la pluie, du Type I qui
+        ne l'est pas. Le levier est donc normé et disponible ; la question est sa
+        généralisation.<sup>[10]</sup></p>
+    </div>
+ 
+    <div class="eyebrow">Piste à explorer</div>
+    <h2>Le marquage luminescent <span class="badge emergent">ÉMERGENT</span></h2>
+    <p>Aux Pays-Bas, la N329 à Oss a testé des « Glowing Lines » : une peinture
+      luminescente chargée le jour, qui brille jusqu'à 10 heures la nuit sans
+      électricité.<sup>[11]</sup>
+      <span class="more-inline">Une version précoce résistait mal à la pluie et le
+      dispositif est resté au stade pilote — d'où son statut « émergent » : promesse réelle,
+      mais pas de preuve consolidée de baisse de mortalité.<sup>[12]</sup> C'est le pari
+      sur lequel un pays peut choisir de devenir pilote.</span></p>
+    <p class="foldhint">Mode « Approfondi » pour le détail de cette piste.</p>
+ 
+    <div class="eyebrow">Réception dans le débat</div>
+    <h2>Comment la communauté reçoit ces mesures</h2>
+    <p>Ces mesures ont été versées au débat citoyen comme propositions de départ.
+      Voici comment les participants les situent — non pas « combien de pour », mais
+      si elles <strong>rassemblent</strong> les différents groupes d'opinion ou si
+      elles les <strong>divisent</strong>. L'indicateur n'apparaît qu'à partir d'un
+      seuil de votes suffisant pour être significatif.</p>
+ 
+    <div class="measure">
+      <div class="mhead">
+        <span class="mid">A</span>
+        <span class="mtxt">Généraliser le marquage rétroréfléchissant visible sous la
+          pluie (Type II, EN 1436).</span>
+        <span class="badge eprouve">ÉPROUVÉ</span>
+      </div>
+      <div class="recept">
+        <p class="rlabel"><strong>Rassemble largement</strong> les différents groupes.</p>
+        <div class="raxis"><div class="rmark" style="left:88%;"></div></div>
+        <div class="rends"><span>divise</span><span>rassemble</span></div>
+        <p class="rcount">d'après 1 240 votes (données fictives)</p>
+      </div>
+    </div>
+ 
+    <div class="measure">
+      <div class="mhead">
+        <span class="mid">B</span>
+        <span class="mtxt">Étendre les barrières médianes (modèle suédois « 2+1 ») aux
+          routes les plus accidentogènes.</span>
+        <span class="badge eprouve">ÉPROUVÉ</span>
+      </div>
+      <div class="recept">
+        <p class="rlabel"><strong>Divise</strong> les groupes d'opinion&nbsp;: pas de
+          position commune à ce stade.</p>
+        <div class="raxis"><div class="rmark" style="left:34%;"></div></div>
+        <div class="rends"><span>divise</span><span>rassemble</span></div>
+        <p class="rcount">d'après 980 votes (données fictives)</p>
+      </div>
+    </div>
+ 
+    <div class="measure">
+      <div class="mhead">
+        <span class="mid">C</span>
+        <span class="mtxt">Expérimenter le marquage luminescent — devenir pays
+          pilote.</span>
+        <span class="badge emergent">ÉMERGENT</span>
+      </div>
+      <div class="recept">
+        <p class="rpending">Pas encore assez de votes pour afficher une tendance
+          fiable. L'indicateur apparaîtra au-delà du seuil de significativité.</p>
+      </div>
+    </div>
+ 
+    <p class="foldhint" style="margin-top:14px;">Le même traitement s'applique à
+      toutes les mesures, qu'elles plaisent ou non&nbsp;: la fiche rend compte du
+      débat, elle ne défend pas ses propositions.</p>
+ 
+    <div class="more">
+      <div class="eyebrow">Vérifier</div>
+      <h2>Sources</h2>
+      <div class="sources"><ol>
+        <li>ONISR — conduite de nuit (~46 % des décès la nuit ; 75 % des piétons tués hors agglo).</li>
+        <li>Sécurité routière (gouv.) — « Conduire la nuit » : risque mortel ~7× au crépuscule.</li>
+        <li>Global Highways — ~50 % des accidents la nuit par temps de pluie.</li>
+        <li>R. Johansson, « Vision Zero », Safety Science 47 (2009) — séparateur central : −80 %.</li>
+        <li>The Economist / Wikipedia — ~1 500 km « 2+1 », ~145 vies sauvées sur 10 ans.</li>
+        <li>Review of Vision Zero Strategies (CTPS) — barrières médianes : −80 %.</li>
+        <li>Touteleurope / Commission européenne — mortalité 2024 (FR 48, SE 20, DK 24, UE 44).</li>
+        <li>PTV / CTPS — Pays-Bas : séparation des usagers vulnérables.</li>
+        <li>Vignetteswitzerland (d'après ETSC PIN) — baisse française plus lente que la moyenne UE.</li>
+        <li>EN 1436 — norme marquage, visibilité de nuit et sous la pluie.</li>
+        <li>Heijmans / Studio Roosegaarde — pilote « Glowing Lines », N329 Oss.</li>
+        <li>Fast Company — version précoce sensible à la pluie ; resté au stade pilote.</li>
+      </ol></div>
+    </div>
+ 
+    <div class="charte"><strong>Notre principe.</strong> Cette fiche n'a pas de couleur
+      politique. Elle expose ce que les données établissent, ce qu'elles ne tranchent pas,
+      distingue ce qui est <span class="badge eprouve">ÉPROUVÉ</span> de ce qui est
+      <span class="badge emergent">ÉMERGENT</span>, et laisse le débat au vote. Une bonne
+      idée n'a ni gauche ni droite.</div>
+  </div>
+ 
+  <!-- ============ COLONNE POLIS (réplique de démo) ============ -->
+  <aside class="aside">
+    <div class="polis">
+      <div class="ptitle"><span>◇ Conversation</span><span class="pdemo">démo · données fictives</span></div>
+      <h3>Comment rendre nos routes plus sûres la nuit&nbsp;?</h3>
+      <p class="pintro">On vote sur les idées des autres. Pas de réponse possible&nbsp;:
+        on approuve une idée, on ne s'attaque pas à son auteur.</p>
+ 
+      <div class="pcard">
+        <div class="pcap"><span>Affirmation d'un participant</span><span class="pcount">1 / 6</span></div>
+        <p class="pstmt">…</p>
+        <p class="pmeta">—</p>
+        <div class="pbtns">
+          <button class="pb" data-v="d">✕ Pas d'accord</button>
+          <button class="pb" data-v="p">→ Passer</button>
+          <button class="pb" data-v="a">✓ D'accord</button>
+        </div>
+        <div class="padd">
+          <input class="pnew" type="text" maxlength="140" placeholder="Proposer votre idée (140 car.)…">
+          <button class="paddbtn">+</button>
+        </div>
+      </div>
+ 
+      <div class="pbar-wrap">
+        <div class="pbar"><span class="pbarfill"></span></div>
+        <p class="pprog">Vous avez voté sur 0 affirmation sur 6.</p>
+      </div>
+ 
+      <div class="pviz-title">Les groupes d'opinion</div>
+      <p class="pviz-sub">Chaque point est un participant. Votre position évolue à mesure
+        que vous votez.</p>
+      <div class="pviz-wrap">
+        <svg viewBox="0 0 360 250" style="width:100%;height:auto;">
+          <ellipse cx="105" cy="115" rx="78" ry="66" fill="#1f9e75" fill-opacity="0.12" stroke="#1f9e75" stroke-opacity="0.4"/>
+          <ellipse cx="262" cy="135" rx="72" ry="60" fill="#d85a30" fill-opacity="0.12" stroke="#d85a30" stroke-opacity="0.4"/>
+          <text x="105" y="36" text-anchor="middle" font-size="11" font-weight="bold" fill="#1f7a5a" font-family="sans-serif">Groupe A · 58 %</text>
+          <text x="105" y="49" text-anchor="middle" font-size="9.5" fill="#1f7a5a" font-family="sans-serif">« agir sur l'infrastructure »</text>
+          <text x="262" y="58" text-anchor="middle" font-size="11" font-weight="bold" fill="#993c1d" font-family="sans-serif">Groupe B · 42 %</text>
+          <text x="262" y="71" text-anchor="middle" font-size="9.5" fill="#993c1d" font-family="sans-serif">« priorité au comportement »</text>
+          <g class="pdots"></g><g class="pme"></g>
+        </svg>
+        <div class="plegend">
+          <span><span class="dot" style="background:#1f9e75;"></span>Groupe A</span>
+          <span><span class="dot" style="background:#d85a30;"></span>Groupe B</span>
+          <span><span class="dot" style="background:transparent;border:2px solid #185fa5;width:11px;height:11px;"></span>Vous</span>
+        </div>
+      </div>
+ 
+      <div class="pcons">
+        <p class="lab">⤳ Point de consensus émergent</p>
+        <p class="txt pcons">L'affirmation qui rassemble le plus largement les deux
+          groupes apparaîtra ici à mesure des votes.</p>
+      </div>
+    </div>
+  </aside>
+ 
+</div>
+ 
+<script>
+  var b=document.body,f=document.getElementById('btnFast'),d=document.getElementById('btnDeep');
+  f.onclick=function(){b.classList.remove('deep');f.classList.add('active');d.classList.remove('active');};
+  d.onclick=function(){b.classList.add('deep');d.classList.add('active');f.classList.remove('active');};
+ 
+  var S=[
+    {t:"Le marquage au sol devrait rester visible même sous la pluie (norme EN 1436).",m:"87 % d'accord · 8 % pas d'accord · 5 % passer",g:"consensus"},
+    {t:"Les autoroutes les plus accidentogènes devraient être éclairées la nuit.",m:"61 % d'accord · 31 % pas d'accord · 8 % passer",g:"A"},
+    {t:"Le vrai problème, c'est la fatigue et l'alcool, pas l'infrastructure.",m:"44 % d'accord · 49 % pas d'accord · 7 % passer",g:"B"},
+    {t:"La France devrait tester le marquage luminescent, quitte à être pays pilote.",m:"54 % d'accord · 33 % pas d'accord · 13 % passer",g:"A"},
+    {t:"Éclairer les autoroutes coûte trop cher pour le bénéfice attendu.",m:"38 % d'accord · 52 % pas d'accord · 10 % passer",g:"B"},
+    {t:"Mieux former à la conduite de nuit serait plus efficace que tout aménagement.",m:"47 % d'accord · 45 % pas d'accord · 8 % passer",g:"B"}
+  ];
+  var M=Math;
+ 
+  // Clone le bloc de vote dans l'emplacement mobile (flux principal).
+  var source=document.querySelector('.aside .polis');
+  var flow=document.getElementById('polisFlow');
+  if(source && flow){ flow.appendChild(source.cloneNode(true)); }
+ 
+  // Initialise CHAQUE bloc .polis indépendamment (desktop + mobile),
+  // en ciblant ses éléments par classe à l'intérieur de l'instance.
+  function initPolis(root){
+    var i=0, voted=0;
+    var st=root.querySelector('.pstmt'), mt=root.querySelector('.pmeta'),
+        ct=root.querySelector('.pcount'), bar=root.querySelector('.pbarfill'),
+        pg=root.querySelector('.pprog'), cs=root.querySelector('.pcons'),
+        dots=root.querySelector('.pdots'), meG=root.querySelector('.pme');
+    var mx=183,my=222;
+ 
+    function render(){st.textContent=S[i].t;mt.textContent="Votes actuels (fictif) : "+S[i].m;ct.textContent=(i+1)+" / "+S.length;}
+    function next(){
+      voted++;
+      pg.textContent="Vous avez voté sur "+voted+" affirmation"+(voted>1?"s":"")+" sur "+S.length+".";
+      bar.style.width=Math.round(((i+1)/S.length)*100)+"%";
+      if(voted===2){cs.textContent="« Le marquage devrait rester visible sous la pluie » — approuvée par 87 % des participants, à travers les deux groupes. La plus consensuelle.";}
+      if(i<S.length-1){i++;setTimeout(render,160);}
+      else{st.textContent="Vous avez voté sur toutes les affirmations. Merci !";mt.textContent="Dans le vrai Pol.is, d'autres affirmations continueraient d'arriver.";root.querySelectorAll('.pb').forEach(function(x){x.disabled=true;x.style.opacity=.4;});}
+    }
+    root.querySelectorAll('.pb').forEach(function(btn){
+      btn.onclick=function(){
+        var v=btn.getAttribute('data-v');
+        var c=v==='a'?'#1f9e75':(v==='d'?'#d85a30':'#888');
+        btn.style.background=c;btn.style.color='#fff';btn.style.borderColor=c;
+        setTimeout(function(){btn.style.background='var(--papier)';btn.style.color='var(--encre)';btn.style.borderColor='var(--trait)';},180);
+        moveMe(v);next();
+      };
+    });
+    var addbtn=root.querySelector('.paddbtn');
+    addbtn.onclick=function(){
+      var n=root.querySelector('.pnew');
+      if(n.value.trim().length>3){n.value="";n.placeholder="Envoyée ! (en attente de modération)";setTimeout(function(){n.placeholder="Proposer votre idée (140 car.)…";},2200);}
+    };
+ 
+    function blob(cx,cy,rx,ry,n,col){
+      for(var k=0;k<n;k++){var a=M.random()*6.28,r=M.sqrt(M.random());
+        var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+        c.setAttribute('cx',(cx+M.cos(a)*rx*r).toFixed(0));c.setAttribute('cy',(cy+M.sin(a)*ry*r).toFixed(0));
+        c.setAttribute('r',2.6);c.setAttribute('fill',col);c.setAttribute('fill-opacity','0.75');dots.appendChild(c);}
+    }
+    blob(105,118,62,50,46,'#1f9e75');blob(262,138,56,46,33,'#d85a30');
+ 
+    function drawMe(){
+      meG.innerHTML='';
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',mx.toFixed(0));c.setAttribute('cy',my.toFixed(0));c.setAttribute('r',5);
+      c.setAttribute('fill','#185fa5');c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','2');meG.appendChild(c);
+      var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',mx.toFixed(0));t.setAttribute('y',(my-9).toFixed(0));t.setAttribute('text-anchor','middle');
+      t.setAttribute('font-size','10');t.setAttribute('fill','#185fa5');t.setAttribute('font-family','sans-serif');t.textContent='vous';meG.appendChild(t);
+    }
+    function moveMe(v){
+      var s=S[i],tx=(s.g==='A'||s.g==='consensus')?(v==='a'?105:262):(v==='a'?262:105);
+      if(v==='p')tx=183;
+      var ty=tx<183?118:(tx>183?138:205);
+      mx+=(tx-mx)*0.45+(M.random()*26-13);my+=(ty-my)*0.45+(M.random()*20-10);drawMe();
+    }
+    drawMe(); render();
+  }
+  document.querySelectorAll('.polis').forEach(initPolis);
+</script>
+</body>
+</html>
+ 
