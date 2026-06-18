@@ -71,6 +71,20 @@ const f = entry.data;
           e.preventDefault();
           document.body.classList.remove('vote-open');
         });
+
+      // Cale le bouton « Voter » juste sous le titre collant : on expose la
+      // hauteur réelle du <h1> (qui peut passer sur 2 lignes) en variable CSS.
+      function syncTitleHeight() {
+        var h1 = document.querySelector('.main h1');
+        if (h1)
+          document.documentElement.style.setProperty(
+            '--title-sticky-h',
+            h1.offsetHeight + 'px',
+          );
+      }
+      syncTitleHeight();
+      window.addEventListener('resize', syncTitleHeight);
+      window.addEventListener('load', syncTitleHeight);
     })();
   </script>
 </Base>

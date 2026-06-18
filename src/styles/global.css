@@ -111,7 +111,8 @@ td .pays { font-weight: 600; }
 .polis-intro .pdemo { background: var(--surligne); padding: 2px 8px; border-radius: 999px; font-size: 11px; }
 /* L'embed Pol.is injecte une iframe dans .polis ; on l'encadre comme une carte. */
 .polis { background: var(--carte); border: 1px solid var(--trait); border-radius: 14px; padding: 8px; box-shadow: 0 1px 3px rgba(20, 30, 50, .05); min-height: 520px; }
-.polis iframe { border-radius: 10px; }
+/* L'iframe Pol.is se bride à max-width:390px en style inline -> on force 100 %. */
+.polis iframe { display: block; width: 100% !important; max-width: 100% !important; border-radius: 10px; }
 
 /* Bouton « Voter » + vue plein écran : visibles uniquement sous le seuil 2-colonnes. */
 .vote-cta { display: none; }
@@ -121,30 +122,51 @@ td .pays { font-weight: 600; }
   .layout { grid-template-columns: 1fr; gap: 0; max-width: 760px; }
   h1 { font-size: 27px; }
 
-  /* Gros bouton VOTER, placé au-dessus de « Ce qui se fait ailleurs »,
-     sticky en haut au scroll. */
+  /* Titre collant en haut de page au scroll (padding 10px). */
+  .main > h1 {
+    position: sticky; top: 0; z-index: 60;
+    margin: 0; padding: 10px 0; background: var(--papier);
+  }
+
+  /* Gros bouton VOTER, collant juste SOUS le titre (hauteur du titre mesurée en JS,
+     repli 56px). Placé au-dessus du « constat », hors du bloc approfondi -> toujours
+     visible quel que soit le mode de lecture. */
   .vote-cta {
-    display: block; width: 100%; margin: 20px 0 6px;
-    position: sticky; top: 0; z-index: 50;
+    display: block; width: 100%; margin: 12px 0 6px;
+    position: sticky; top: var(--title-sticky-h, 56px); z-index: 55;
     font-family: var(--sans); font-size: 16px; font-weight: 600; cursor: pointer;
     background: var(--encre); color: #fff; border: none; border-radius: 10px;
-    padding: 15px 18px; box-shadow: 0 3px 10px rgba(20, 30, 50, .2);
+    padding: 13px 18px; box-shadow: 0 3px 10px rgba(20, 30, 50, .2);
   }
   .vote-cta:hover { background: #000; }
 
-  /* L'aside devient une « page » plein écran, glissée hors champ par défaut. */
+  /* La conversation passe en « page » plein écran, SANS padding (l'iframe a déjà
+     son propre cadre) pour maximiser sa largeur. */
   .aside {
     position: fixed; inset: 0; z-index: 1000; margin: 0; max-height: none;
-    background: var(--papier); overflow-y: auto; padding: 14px 16px 40px;
+    background: var(--papier); overflow-y: auto; padding: 0;
     transform: translateX(100%); transition: transform .25s ease;
   }
   body.vote-open { overflow: hidden; }
   body.vote-open .aside { transform: translateX(0); }
 
-  .vote-back {
-    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;
-    cursor: pointer; font-size: 14px; color: var(--encre); text-decoration: none;
-    background: var(--carte); border: 1px solid var(--trait); border-radius: 8px;
-    padding: 8px 12px;
+  .aside .polis-intro { display: none; }
+  .aside .polis {
+    border: none; background: none; box-shadow: none;
+    padding: 0; border-radius: 0; min-height: auto;
   }
+  /* L'iframe pose un border + border-radius en inline -> on les retire (mobile). */
+  .aside .polis iframe { border: none !important; border-radius: 0 !important; }
+
+  /* Barre de retour pleine largeur, collée en haut de la vue Pol.is :
+     grande zone de tap, toujours atteignable pendant le scroll. */
+  .vote-back {
+    display: flex; align-items: center; gap: 8px;
+    position: sticky; top: 0; z-index: 5;
+    margin: 0; padding: 14px 16px;
+    font-size: 15px; font-weight: 600;
+    color: var(--encre); text-decoration: none; cursor: pointer;
+    background: var(--papier); border-bottom: 1px solid var(--trait);
+  }
+  .vote-back:active { background: var(--surligne); }
 }
