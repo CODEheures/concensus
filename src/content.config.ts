@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { MINISTERES } from './lib/taxonomie';
 
 // Une fiche-benchmark = un fichier MDX. On la modélise en CHAMPS (pas un blob HTML) :
 // son anatomie est stricte (keyfact, comparatif, mesures, sources). Le corps MDX
@@ -10,7 +11,7 @@ const fiches = defineCollection({
     titre: z.string(), // <h1>
     chapo: z.string(),
     fil: z.object({
-      ministere: z.string(),
+      ministere: z.enum(MINISTERES), // vocabulaire contrôlé (cf. lib/taxonomie.ts)
       theme: z.string(),
       sousTheme: z.string(),
     }),

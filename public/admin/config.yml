@@ -44,7 +44,27 @@ collections:
         label: Fil d'Ariane
         widget: object
         fields:
-          - { name: ministere, label: Ministère, widget: string }
+          # Menu déroulant : vocabulaire contrôlé. GARDER EN PHASE avec src/lib/taxonomie.ts
+          - name: ministere
+            label: Ministère
+            widget: select
+            options:
+              - "Mobilité & Transports"
+              - "Intérieur & Sécurité"
+              - "Justice"
+              - "Santé & Solidarités"
+              - "Éducation & Jeunesse"
+              - "Enseignement supérieur & Recherche"
+              - "Travail & Emploi"
+              - "Économie & Finances"
+              - "Transition écologique & Énergie"
+              - "Agriculture & Alimentation"
+              - "Culture"
+              - "Logement & Aménagement"
+              - "Affaires étrangères"
+              - "Armées & Défense"
+              - "Outre-mer"
+              - "Sports"
           - { name: theme, label: Thème, widget: string }
           - { name: sousTheme, label: Sous-thème, widget: string }
 
