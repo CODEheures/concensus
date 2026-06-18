@@ -15,15 +15,9 @@ const fiches = defineCollection({
       sousTheme: z.string(),
     }),
     tags: z.array(z.string()), // navigation transversale
-    statut: z.enum([
-      'brouillon',
-      'en_revue',
-      'publie',
-      'a_reviser',
-      'abouti',
-      'en_sommeil',
-      'archive',
-    ]),
+    // États POST-publication uniquement : « pas encore publié » est géré par le
+    // workflow Git/PR (Sveltia), pas par le frontmatter. Voir docs/ARCHITECTURE.md §5.
+    statut: z.enum(['publie', 'a_reviser', 'abouti', 'en_sommeil', 'archive']),
     origine: z.object({
       elaboreeAvec: z.string().optional(),
       revueCharte: z.boolean(),

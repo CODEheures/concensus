@@ -90,6 +90,30 @@ td .pays { font-weight: 600; }
 .sources li { margin-bottom: 7px; }
 .charte { margin-top: 34px; font-size: 12.5px; color: var(--encre-doux); border-top: 1px solid var(--trait); padding-top: 16px; }
 
+/* ---- Bandeau de cycle de vie de la fiche (statut post-publication) ---- */
+.statut-banner {
+  display: flex; gap: 8px; align-items: baseline;
+  margin: 18px 0 0; padding: 11px 15px;
+  font-size: 13.5px; line-height: 1.45;
+  border: 1px solid var(--trait); border-radius: 10px;
+}
+.statut-banner strong { font-weight: 700; }
+.statut-banner.abouti { background: var(--eprouve-bg); border-color: #cfe7db; color: var(--eprouve-fg); }
+.statut-banner.reviser { background: var(--emergent-bg); border-color: #f1e0c2; color: var(--emergent-fg); }
+.statut-banner.sommeil,
+.statut-banner.archive { background: var(--surligne); color: var(--encre-doux); }
+
+/* ---- Pastille de statut (accueil) ---- */
+.fiche-chip {
+  display: inline-block; margin-left: 8px; vertical-align: middle;
+  font-size: 11px; font-weight: 600; letter-spacing: .02em;
+  border: 1px solid var(--trait); border-radius: 999px; padding: 2px 9px;
+}
+.fiche-chip.abouti { background: var(--eprouve-bg); color: var(--eprouve-fg); }
+.fiche-chip.reviser { background: var(--emergent-bg); color: var(--emergent-fg); }
+.fiche-chip.sommeil,
+.fiche-chip.archive { background: var(--surligne); color: var(--encre-doux); }
+
 /* ---- Mesures évaluées + indicateur de réception communautaire ---- */
 .measure { background: var(--carte); border: 1px solid var(--trait); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
 .measure .mhead { display: flex; align-items: flex-start; gap: 10px; }

@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ReadingMode from '../../components/ReadingMode.astro';
 import PolisEmbed from '../../components/PolisEmbed.astro';
+import { statutInfo } from '../../lib/statut';
 
 export async function getStaticPaths() {
   const fiches = await getCollection('fiches');
@@ -15,11 +16,20 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const f = entry.data;
+const st = statutInfo(f.statut);
 ---
 
 <Base title={`${f.titre} — Consensus`} description={f.chapo}>
   <div class="layout">
     <div class="main">
+      {
+        st.banner && (
+          <div class={`statut-banner ${st.ton}`}>
+            <strong>{st.label}.</strong>
+            <span>{st.banner}</span>
+          </div>
+        )
+      }
       <nav class="breadcrumb">
         <span>{f.fil.ministere}</span><span class="sep">›</span>
         <span>{f.fil.theme}</span><span class="sep">›</span><span>{f.fil.sousTheme}</span>

@@ -1,27 +1,52 @@
 ---
 import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { statutInfo } from '../lib/statut';
 
 const fiches = await getCollection('fiches');
 ---
 
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Consensus</title>
-  </head>
-  <body>
+<Base title="Consensus">
+  <main class="home">
     <h1>Consensus</h1>
-    <p>POC — fiches benchmark soumises à la délibération citoyenne.</p>
-    <ul>
+    <p class="chapo">
+      POC — fiches benchmark soumises à la délibération citoyenne.
+    </p>
+    <ul class="fiche-list">
       {
-        fiches.map((fiche) => (
-          <li>
-            <a href={`/fiches/${fiche.id}/`}>{fiche.data.titre}</a>
-          </li>
-        ))
+        fiches.map((fiche) => {
+          const st = statutInfo(fiche.data.statut);
+          return (
+            <li>
+              <a href={`/fiches/${fiche.id}/`}>{fiche.data.titre}</a>
+              {st.ton !== 'neutre' && (
+                <span class={`fiche-chip ${st.ton}`}>{st.label}</span>
+              )}
+            </li>
+          );
+        })
       }
     </ul>
-  </body>
-</html>
+  </main>
+</Base>
+
+<style>
+  .home {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+  .fiche-list {
+    list-style: none;
+    padding: 0;
+    margin: 22px 0 0;
+  }
+  .fiche-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--trait);
+  }
+  .fiche-list a {
+    font-family: var(--serif);
+    font-size: 18px;
+  }
+</style>

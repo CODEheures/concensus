@@ -50,13 +50,12 @@ collections:
 
       - { name: tags, label: Tags, widget: list, default: [] }
 
+      # États post-publication seulement ; brouillon/en-revue = workflow Git/PR.
       - name: statut
-        label: Statut éditorial
+        label: Statut
         widget: select
-        default: brouillon
+        default: publie
         options:
-          - brouillon
-          - en_revue
           - publie
           - a_reviser
           - abouti

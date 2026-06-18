@@ -84,7 +84,7 @@ const fiche = z.object({
   chapo: z.string(),
   fil: z.object({ ministere: z.string(), theme: z.string(), sousTheme: z.string() }),
   tags: z.array(z.string()),            // navigation transversale
-  statut: z.enum(['brouillon','en_revue','publie','a_reviser','abouti','en_sommeil','archive']),
+  statut: z.enum(['publie','a_reviser','abouti','en_sommeil','archive']), // post-publication ; brouillon/en-revue = workflow Git/PR
   origine: z.object({ elaboreeAvec: z.string().optional(), revueCharte: z.boolean() }),
   keyfact: z.object({ chiffre: z.string(), texte: z.string(), source: z.number() }),
   comparatif: z.array(z.object({
