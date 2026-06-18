@@ -56,7 +56,8 @@ const fiches = defineCollection({
       z.object({
         n: z.number(),
         texte: z.string(),
-        url: z.string().url().optional(),
+        // Le CMS écrit '' pour un champ vide -> on tolère URL valide | '' | absent.
+        url: z.string().url().or(z.literal('')).optional(),
       }),
     ),
     polis: z.object({
