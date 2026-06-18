@@ -1,0 +1,21 @@
+---
+interface Source {
+  n: number;
+  texte: string;
+  url?: string;
+}
+interface Props {
+  sources: Source[];
+}
+const { sources } = Astro.props;
+---
+
+<div class="sources">
+  <ol>
+    {
+      sources.map((s) => (
+        <li>{s.url ? <a href={s.url}>{s.texte}</a> : s.texte}</li>
+      ))
+    }
+  </ol>
+</div>

@@ -1,0 +1,46 @@
+---
+interface Row {
+  pays: string;
+  sousTitre?: string;
+  tuesParM: string;
+  levier: string;
+  sources?: number[];
+  role: 'france' | 'reference' | 'autre';
+}
+interface Props {
+  rows: Row[];
+  caption?: string;
+}
+const { rows, caption } = Astro.props;
+const cls = (role: Row['role']) =>
+  role === 'france' ? 'france' : role === 'reference' ? 'ref' : '';
+---
+
+<table>
+  {caption && <caption>{caption}</caption>}
+  <thead>
+    <tr><th>Pays</th><th>Tués/M</th><th>Levier d'infrastructure</th></tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((r) => (
+        <tr class={cls(r.role)}>
+          <td>
+            <span class="pays">{r.pays}</span>
+            {r.sousTitre && (
+              <>
+                <br />
+                <small>{r.sousTitre}</small>
+              </>
+            )}
+          </td>
+          <td>{r.tuesParM}</td>
+          <td>
+            {r.levier}
+            {(r.sources ?? []).map((n) => <sup>[{n}]</sup>)}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

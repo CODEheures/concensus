@@ -1,0 +1,25 @@
+---
+import Reception from './Reception.astro';
+import type { ReceptionData } from './Reception.astro';
+
+interface Props {
+  id: string;
+  texte: string;
+  preuve: 'eprouve' | 'emergent';
+  reception?: ReceptionData;
+}
+const { id, texte, preuve, reception } = Astro.props;
+const badge =
+  preuve === 'eprouve'
+    ? { cls: 'eprouve', label: 'ÉPROUVÉ' }
+    : { cls: 'emergent', label: 'ÉMERGENT' };
+---
+
+<div class="measure">
+  <div class="mhead">
+    <span class="mid">{id}</span>
+    <span class="mtxt">{texte}</span>
+    <span class={`badge ${badge.cls}`}>{badge.label}</span>
+  </div>
+  <Reception reception={reception} />
+</div>

@@ -1,0 +1,36 @@
+---
+// Indicateur de réception « divise <-> rassemble » d'une mesure.
+// Les données viennent du pipeline (src/data/polis/<slug>.json, généré en CI).
+// Tant qu'on est sous le seuil de votes significatif -> état « en attente ».
+export interface ReceptionData {
+  votes: number;
+  position: number; // 0 (divise) .. 100 (rassemble)
+  label: string; // peut contenir un <strong>...</strong>
+  aboveThreshold: boolean;
+}
+interface Props {
+  reception?: ReceptionData;
+}
+const { reception } = Astro.props;
+const show = reception?.aboveThreshold === true;
+---
+
+<div class="recept">
+  {
+    show ? (
+      <>
+        <p class="rlabel" set:html={reception!.label} />
+        <div class="raxis">
+          <div class="rmark" style={`left:${reception!.position}%;`} />
+        </div>
+        <div class="rends"><span>divise</span><span>rassemble</span></div>
+        <p class="rcount">d'après {reception!.votes} votes</p>
+      </>
+    ) : (
+      <p class="rpending">
+        Pas encore assez de votes pour afficher une tendance fiable. L'indicateur
+        apparaîtra au-delà du seuil de significativité.
+      </p>
+    )
+  }
+</div>

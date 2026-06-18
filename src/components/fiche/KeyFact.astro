@@ -1,0 +1,15 @@
+---
+interface Props {
+  chiffre: string;
+  texte: string;
+  source?: number;
+}
+const { chiffre, texte, source } = Astro.props;
+---
+
+<div class="keyfact">
+  <div class="big">{chiffre}</div>
+  <div class="txt">
+    {texte}{source != null && <sup>[{source}]</sup>}
+  </div>
+</div>

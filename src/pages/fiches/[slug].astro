@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ReadingMode from '../../components/ReadingMode.astro';
+import PolisEmbed from '../../components/PolisEmbed.astro';
+
+export async function getStaticPaths() {
+  const fiches = await getCollection('fiches');
+  return fiches.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const f = entry.data;
+---
+
+<Base title={`${f.titre} — Consensus`} description={f.chapo}>
+  <div class="layout">
+    <div class="main">
+      <nav class="breadcrumb">
+        <span>{f.fil.ministere}</span><span class="sep">›</span>
+        <span>{f.fil.theme}</span><span class="sep">›</span><span>{f.fil.sousTheme}</span>
+      </nav>
+
+      <div class="tags">
+        {f.tags.map((t) => <span class="tag">{t}</span>)}
+      </div>
+
+      <h1>{f.titre}</h1>
+      <p class="chapo">{f.chapo}</p>
+
+      <ReadingMode />
+
+      <Content />
+
+      <div class="charte">
+        <strong>Notre principe.</strong> Cette fiche n'a pas de couleur politique. Elle
+        expose ce que les données établissent, ce qu'elles ne tranchent pas, distingue ce
+        qui est <span class="badge eprouve">ÉPROUVÉ</span> de ce qui est
+        <span class="badge emergent">ÉMERGENT</span>, et laisse le débat au vote. Une bonne
+        idée n'a ni gauche ni droite.
+        {
+          f.origine.elaboreeAvec && (
+            <>
+              {' '}<em>Fiche élaborée avec {f.origine.elaboreeAvec}, revue selon la charte.</em>
+            </>
+          )
+        }
+      </div>
+    </div>
+
+    <aside class="aside">
+      <PolisEmbed conversationId={f.polis.conversationId} />
+    </aside>
+  </div>
+</Base>

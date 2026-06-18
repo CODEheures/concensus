@@ -1,0 +1,29 @@
+---
+// Bascule rapide / approfondi : ajoute/retire la classe `deep` sur <body>.
+// Le CSS (.more, body.deep .more) fait le reste. Script vanilla porté du gabarit.
+---
+
+<div class="modebar">
+  <span class="lbl">Mode de lecture</span>
+  <button class="modebtn active" id="btnFast">Rapide</button>
+  <button class="modebtn" id="btnDeep">Approfondi</button>
+</div>
+
+<script is:inline>
+  (function () {
+    var b = document.body,
+      f = document.getElementById('btnFast'),
+      d = document.getElementById('btnDeep');
+    if (!f || !d) return;
+    f.onclick = function () {
+      b.classList.remove('deep');
+      f.classList.add('active');
+      d.classList.remove('active');
+    };
+    d.onclick = function () {
+      b.classList.add('deep');
+      d.classList.add('active');
+      f.classList.remove('active');
+    };
+  })();
+</script>

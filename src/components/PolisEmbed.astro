@@ -1,0 +1,15 @@
+---
+// Vrai embed Pol.is. embed.js scanne les div.polis[data-conversation_id] et y
+// injecte l'iframe de la conversation. On ne met AUCUN enfant dans .polis :
+// Pol.is en prend le contrôle (cross-origin, non stylable depuis l'hôte).
+interface Props {
+  conversationId: string;
+}
+const { conversationId } = Astro.props;
+---
+
+<p class="polis-intro">
+  <span>◇ Conversation citoyenne</span>
+</p>
+<div class="polis" data-conversation_id={conversationId}></div>
+<script is:inline async src="https://pol.is/embed.js"></script>

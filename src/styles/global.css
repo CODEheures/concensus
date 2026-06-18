@@ -1,0 +1,122 @@
+/* =========================================================================
+   GABARIT DE FICHE-BENCHMARK — porté verbatim depuis
+   intake/fiche-visibilite-nocturne.html. Voir docs/ARCHITECTURE.md §4.
+   Colonne gauche : contenu, double mode de lecture (rapide / approfondi).
+   Colonne droite : vote Pol.is (vrai embed, iframe non stylable), sticky desktop,
+   remontée en flux sur mobile.
+   ========================================================================= */
+:root {
+  --encre: #1a2230; --encre-doux: #51607a; --papier: #f7f8fa; --carte: #fff;
+  --trait: #dfe3ea; --france: #c0392b; --reference: #1f7a5a; --surligne: #eef2f7;
+  --eprouve-bg: #e8f3ee; --eprouve-fg: #1f7a5a;
+  --emergent-bg: #fdf3e3; --emergent-fg: #b7791f;
+  --grpA: #1f9e75; --grpB: #d85a30; --moi: #185fa5;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--papier); color: var(--encre); font-family: var(--sans); line-height: 1.6; font-size: 16px; }
+a { color: inherit; }
+.layout {
+  max-width: 1120px; margin: 0 auto; padding: 0 20px 80px; display: grid;
+  grid-template-columns: 1fr 380px; gap: 38px; align-items: start;
+}
+.main { min-width: 0; }
+.aside { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; }
+.aside::-webkit-scrollbar { width: 8px; }
+.aside::-webkit-scrollbar-thumb { background: var(--trait); border-radius: 999px; }
+
+.breadcrumb { font-size: 13px; color: var(--encre-doux); padding: 22px 0 0; }
+.breadcrumb .sep { margin: 0 6px; opacity: .5; }
+.tags { margin: 14px 0 0; }
+.tag {
+  display: inline-block; font-size: 12px; color: var(--encre-doux); background: var(--surligne);
+  border: 1px solid var(--trait); border-radius: 999px; padding: 3px 11px; margin: 0 6px 6px 0;
+}
+h1 { font-family: var(--serif); font-size: 32px; line-height: 1.18; margin: 16px 0 6px; }
+.chapo { font-size: 18px; color: var(--encre-doux); margin: 0 0 4px; }
+
+.modebar {
+  display: flex; align-items: center; gap: 10px; margin: 22px 0 6px; padding: 10px 14px;
+  background: var(--carte); border: 1px solid var(--trait); border-radius: 10px;
+}
+.modebar .lbl { font-size: 13px; color: var(--encre-doux); margin-right: auto; }
+.modebtn {
+  font-size: 13px; font-family: var(--sans); cursor: pointer; border: 1px solid var(--trait);
+  background: var(--papier); color: var(--encre-doux); border-radius: 7px; padding: 6px 12px;
+}
+.modebtn.active { background: var(--encre); color: #fff; border-color: var(--encre); }
+
+.keyfact {
+  background: var(--carte); border: 1px solid var(--trait); border-left: 4px solid var(--france);
+  border-radius: 10px; padding: 18px 20px; margin: 18px 0;
+}
+.keyfact .big { font-family: var(--serif); font-size: 28px; font-weight: 700; line-height: 1.1; }
+.keyfact .txt { font-size: 15px; color: var(--encre-doux); margin-top: 4px; }
+
+h2 { font-family: var(--serif); font-size: 22px; margin: 40px 0 4px; padding-top: 16px; border-top: 2px solid var(--encre); }
+.eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--encre-doux); font-weight: 600; }
+p { margin: 13px 0; }
+
+.rank { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.rank .cell { flex: 1 1 120px; background: var(--carte); border: 1px solid var(--trait); border-radius: 10px; padding: 14px 16px; }
+.rank .num { font-family: var(--serif); font-size: 26px; font-weight: 700; line-height: 1; }
+.rank .lab { font-size: 12.5px; color: var(--encre-doux); margin-top: 6px; }
+.rank .france .num { color: var(--france); }
+.rank .ref .num { color: var(--reference); }
+
+.more { display: none; }
+body.deep .more { display: block; }
+.more-inline { display: none; }
+body.deep .more-inline { display: inline; }
+.foldhint { font-size: 12.5px; color: var(--encre-doux); font-style: italic; margin-top: 6px; }
+body.deep .foldhint { display: none; }
+
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; background: var(--carte); }
+caption { text-align: left; font-size: 12.5px; color: var(--encre-doux); margin-bottom: 8px; }
+th, td { text-align: left; padding: 11px 13px; border-bottom: 1px solid var(--trait); vertical-align: top; }
+thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--encre-doux); border-bottom: 2px solid var(--encre); }
+tbody tr.france { background: #fdf3f2; }
+tbody tr.ref { background: #f0f8f4; }
+td .pays { font-weight: 600; }
+.caveat { background: var(--surligne); border: 1px solid var(--trait); border-radius: 10px; padding: 16px 18px; margin: 22px 0; font-size: 14px; }
+
+.badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .03em; border-radius: 5px; padding: 2px 8px; vertical-align: middle; }
+.badge.eprouve { background: var(--eprouve-bg); color: var(--eprouve-fg); }
+.badge.emergent { background: var(--emergent-bg); color: var(--emergent-fg); }
+
+.sources { font-size: 13px; color: var(--encre-doux); }
+.sources ol { padding-left: 18px; }
+.sources li { margin-bottom: 7px; }
+.charte { margin-top: 34px; font-size: 12.5px; color: var(--encre-doux); border-top: 1px solid var(--trait); padding-top: 16px; }
+
+/* ---- Mesures évaluées + indicateur de réception communautaire ---- */
+.measure { background: var(--carte); border: 1px solid var(--trait); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+.measure .mhead { display: flex; align-items: flex-start; gap: 10px; }
+.measure .mid { font-family: var(--serif); font-weight: 700; color: var(--encre-doux); flex: 0 0 auto; font-size: 15px; }
+.measure .mtxt { font-size: 14.5px; line-height: 1.45; flex: 1; }
+.measure .mhead .badge { flex: 0 0 auto; margin-top: 2px; }
+/* La barre de réception : axe clivage(gauche) -> consensus(droite), neutre */
+.recept { margin-top: 11px; }
+.recept .rlabel { font-size: 12.5px; color: var(--encre-doux); margin: 0 0 6px; }
+.recept .rlabel strong { color: var(--encre); font-weight: 600; }
+.raxis { position: relative; height: 8px; background: linear-gradient(90deg, #f0d6cf, #eef2f7, #d8ece2); border-radius: 999px; }
+.rmark { position: absolute; top: -3px; width: 14px; height: 14px; border-radius: 50%; background: var(--carte); border: 2px solid var(--encre); transform: translateX(-50%); }
+.rends { display: flex; justify-content: space-between; font-size: 11px; color: var(--encre-doux); margin-top: 5px; }
+.rpending { font-size: 12.5px; color: var(--encre-doux); font-style: italic; margin-top: 9px; background: var(--surligne); border: 1px dashed var(--trait); border-radius: 8px; padding: 9px 11px; }
+.rcount { font-size: 11.5px; color: var(--encre-doux); margin-top: 6px; }
+
+/* ============ BLOC POLIS (vrai embed iframe) ============ */
+.polis-intro { font-size: 13px; color: var(--encre-doux); margin: 0 0 10px; }
+.polis-intro .pdemo { background: var(--surligne); padding: 2px 8px; border-radius: 999px; font-size: 11px; }
+/* L'embed Pol.is injecte une iframe dans .polis ; on l'encadre comme une carte. */
+.polis { background: var(--carte); border: 1px solid var(--trait); border-radius: 14px; padding: 8px; box-shadow: 0 1px 3px rgba(20, 30, 50, .05); min-height: 520px; }
+.polis iframe { border-radius: 10px; }
+
+/* Copie mobile du vote (insérée en flux sous le constat-choc) */
+.polis-flow { display: none; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; gap: 0; }
+  h1 { font-size: 27px; }
+  .aside { position: static; max-height: none; display: block; margin: 18px 0 8px; }
+}

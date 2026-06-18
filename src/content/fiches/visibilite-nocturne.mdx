@@ -1,0 +1,143 @@
+---
+titre: "Voir la route la nuit, et sous la pluie"
+chapo: "Éclairage, marquage et balisage des voies rapides : ce que font les pays qui meurent le moins la nuit, et où se situe la France."
+fil:
+  ministere: "Mobilité & Transports"
+  theme: "Sécurité routière"
+  sousTheme: "Visibilité nocturne"
+tags: ["nuit", "infrastructure", "visibilité", "autoroute"]
+statut: "brouillon"
+origine:
+  revueCharte: true
+keyfact:
+  chiffre: "≈ 46 % des morts, 10 % du trafic"
+  texte: "Près de la moitié des décès routiers surviennent la nuit, qui ne représente pourtant qu'un dixième de la circulation (ONISR, 2023-2024)."
+  source: 1
+comparatif:
+  - pays: "Suède"
+    sousTitre: "Vision Zero"
+    tuesParM: "20"
+    levier: "Routes « 2+1 » à barrière médiane câble : ~1 500 km, ~145 vies sauvées sur 10 ans ; jusqu'à −80 % de tués sur les axes réaménagés."
+    sources: [4, 5, 6]
+    role: "reference"
+  - pays: "Danemark"
+    tuesParM: "24"
+    levier: "2ᵉ pays le plus sûr de l'UE ; aménagement et séparation des usagers vulnérables."
+    sources: [7]
+    role: "autre"
+  - pays: "Pays-Bas"
+    tuesParM: "—"
+    levier: "Séparation physique systématique des usagers vulnérables ; pilote de marquage luminescent."
+    sources: [8]
+    role: "autre"
+  - pays: "France"
+    tuesParM: "48"
+    levier: "Au-dessus de la moyenne UE, baisse plus lente sur la décennie. Autoroutes peu éclairées, marquage « pluie » non généralisé."
+    sources: [7, 9]
+    role: "france"
+mesures:
+  - id: "A"
+    texte: "Généraliser le marquage rétroréfléchissant visible sous la pluie (Type II, EN 1436)."
+    preuve: "eprouve"
+    polisCommentId: 1
+  - id: "B"
+    texte: "Étendre les barrières médianes (modèle suédois « 2+1 ») aux routes les plus accidentogènes."
+    preuve: "eprouve"
+    polisCommentId: 2
+  - id: "C"
+    texte: "Expérimenter le marquage luminescent — devenir pays pilote."
+    preuve: "emergent"
+    polisCommentId: 3
+sources:
+  - n: 1
+    texte: "ONISR — conduite de nuit (~46 % des décès la nuit ; 75 % des piétons tués hors agglo)."
+  - n: 2
+    texte: "Sécurité routière (gouv.) — « Conduire la nuit » : risque mortel ~7× au crépuscule."
+  - n: 3
+    texte: "Global Highways — ~50 % des accidents la nuit par temps de pluie."
+  - n: 4
+    texte: "R. Johansson, « Vision Zero », Safety Science 47 (2009) — séparateur central : −80 %."
+  - n: 5
+    texte: "The Economist / Wikipedia — ~1 500 km « 2+1 », ~145 vies sauvées sur 10 ans."
+  - n: 6
+    texte: "Review of Vision Zero Strategies (CTPS) — barrières médianes : −80 %."
+  - n: 7
+    texte: "Touteleurope / Commission européenne — mortalité 2024 (FR 48, SE 20, DK 24, UE 44)."
+  - n: 8
+    texte: "PTV / CTPS — Pays-Bas : séparation des usagers vulnérables."
+  - n: 9
+    texte: "Vignetteswitzerland (d'après ETSC PIN) — baisse française plus lente que la moyenne UE."
+  - n: 10
+    texte: "EN 1436 — norme marquage, visibilité de nuit et sous la pluie."
+  - n: 11
+    texte: "Heijmans / Studio Roosegaarde — pilote « Glowing Lines », N329 Oss."
+  - n: 12
+    texte: "Fast Company — version précoce sensible à la pluie ; resté au stade pilote."
+polis:
+  conversationId: "6mzhrbjjdf"
+  reportId: "r8umr3p7b3cdc3crsracb"
+---
+
+import KeyFact from '../../components/fiche/KeyFact.astro';
+import Comparatif from '../../components/fiche/Comparatif.astro';
+import Mesure from '../../components/fiche/Mesure.astro';
+import Sources from '../../components/fiche/Sources.astro';
+import Deep from '../../components/fiche/Deep.astro';
+
+<KeyFact chiffre={frontmatter.keyfact.chiffre} texte={frontmatter.keyfact.texte} source={frontmatter.keyfact.source} />
+
+<Deep>
+<div class="eyebrow">Le constat, en détail</div>
+
+## La nuit, et surtout la pluie
+
+<div class="rank">
+  <div class="cell france"><div class="num">48</div><div class="lab">France — tués / million hab. (2024)</div></div>
+  <div class="cell ref"><div class="num">20</div><div class="lab">Suède — la plus sûre de l'UE</div></div>
+  <div class="cell"><div class="num">44</div><div class="lab">Moyenne UE</div></div>
+</div>
+
+Le risque d'accident mortel au crépuscule est environ **sept fois** supérieur au risque diurne.<sup>[2]</sup> Et l'on estime qu'environ **la moitié des accidents** surviennent la nuit par temps de pluie — des conditions pourtant rares —, lorsque le film d'eau renvoie la lumière des phares au lieu de révéler la ligne blanche.<sup>[3]</sup> Hors agglomération, **75 %** des piétons tués le sont la nuit.<sup>[1]</sup>
+
+L'expérience française recoupe ces chiffres : autoroutes très largement non éclairées, séparation centrale parfois sans dispositif rétroréfléchissant, marquage au sol qui peut s'effacer visuellement sous la pluie.
+
+<div class="caveat"><strong>Ce que ces chiffres prouvent, et ce qu'ils ne prouvent pas.</strong> Ils établissent que la nuit est plus mortelle. Ils n'isolent pas la part de l'infrastructure de celle du comportement (fatigue, alcool, vitesse), qui pèse aussi lourd la nuit. Le benchmark ci-dessous regarde des pays ayant agi spécifiquement sur l'infrastructure, et ce qu'ils ont mesuré.</div>
+</Deep>
+
+<p class="foldhint">Passez en « Approfondi » pour les chiffres détaillés, le comparatif et les sources.</p>
+
+<div class="eyebrow">Ce qui se fait ailleurs</div>
+
+## Comparatif des leviers
+
+<Comparatif rows={frontmatter.comparatif} caption="Mortalité par million d'habitants (2024) et mesures documentées." />
+
+<Deep>
+Un standard existe : la norme européenne **EN 1436** distingue le marquage Type II, conçu pour rester rétroréfléchissant sous la pluie, du Type I qui ne l'est pas. Le levier est donc normé et disponible ; la question est sa généralisation.<sup>[10]</sup>
+</Deep>
+
+<div class="eyebrow">Piste à explorer</div>
+
+## Le marquage luminescent <span class="badge emergent">ÉMERGENT</span>
+
+Aux Pays-Bas, la N329 à Oss a testé des « Glowing Lines » : une peinture luminescente chargée le jour, qui brille jusqu'à 10 heures la nuit sans électricité.<sup>[11]</sup> <span class="more-inline">Une version précoce résistait mal à la pluie et le dispositif est resté au stade pilote — d'où son statut « émergent » : promesse réelle, mais pas de preuve consolidée de baisse de mortalité.<sup>[12]</sup> C'est le pari sur lequel un pays peut choisir de devenir pilote.</span>
+
+<p class="foldhint">Mode « Approfondi » pour le détail de cette piste.</p>
+
+<div class="eyebrow">Réception dans le débat</div>
+
+## Comment la communauté reçoit ces mesures
+
+Ces mesures ont été versées au débat citoyen comme propositions de départ. Voici comment les participants les situent — non pas « combien de pour », mais si elles **rassemblent** les différents groupes d'opinion ou si elles les **divisent**. L'indicateur n'apparaît qu'à partir d'un seuil de votes suffisant pour être significatif.
+
+{frontmatter.mesures.map((m) => <Mesure id={m.id} texte={m.texte} preuve={m.preuve} />)}
+
+<p class="foldhint" style="margin-top:14px;">Le même traitement s'applique à toutes les mesures, qu'elles plaisent ou non : la fiche rend compte du débat, elle ne défend pas ses propositions.</p>
+
+<Deep>
+<div class="eyebrow">Vérifier</div>
+
+## Sources
+
+<Sources sources={frontmatter.sources} />
+</Deep>
