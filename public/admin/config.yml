@@ -65,8 +65,22 @@ collections:
               - "Armées & Défense"
               - "Outre-mer"
               - "Sports"
-          - { name: theme, label: Thème, widget: string }
-          - { name: sousTheme, label: Sous-thème, widget: string }
+          # Vocabulaires EXTENSIBLES : on choisit un terme existant, ou on en ajoute
+          # un dans les collections « Thèmes » / « Sous-thèmes » ci-dessous.
+          - name: theme
+            label: Thème
+            widget: relation
+            collection: themes
+            value_field: '{{slug}}'
+            search_fields: [nom]
+            display_fields: [nom]
+          - name: sousTheme
+            label: Sous-thème
+            widget: relation
+            collection: sousThemes
+            value_field: '{{slug}}'
+            search_fields: [nom]
+            display_fields: [nom]
 
       - { name: tags, label: Tags, widget: list, default: [] }
 
@@ -154,3 +168,30 @@ collections:
       # Widget `text` volontaire : pas d'éditeur rich-text -> aucun risque de
       # corrompre les imports/composants. À éditer avec précaution.
       - { name: body, label: Corps MDX (avancé — brut), widget: text, required: false }
+
+  # --- Vocabulaires de taxonomie (extensibles depuis le CMS) ---
+  - name: themes
+    label: Thèmes
+    label_singular: Thème
+    folder: src/content/themes
+    extension: md
+    format: frontmatter
+    create: true
+    identifier_field: nom
+    slug: '{{slug}}'
+    summary: '{{nom}}'
+    fields:
+      - { name: nom, label: Nom, widget: string }
+
+  - name: sousThemes
+    label: Sous-thèmes
+    label_singular: Sous-thème
+    folder: src/content/sous-themes
+    extension: md
+    format: frontmatter
+    create: true
+    identifier_field: nom
+    slug: '{{slug}}'
+    summary: '{{nom}}'
+    fields:
+      - { name: nom, label: Nom, widget: string }

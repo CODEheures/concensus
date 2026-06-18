@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { MINISTERES } from './lib/taxonomie';
 
@@ -11,9 +11,9 @@ const fiches = defineCollection({
     titre: z.string(), // <h1>
     chapo: z.string(),
     fil: z.object({
-      ministere: z.enum(MINISTERES), // vocabulaire contrôlé (cf. lib/taxonomie.ts)
-      theme: z.string(),
-      sousTheme: z.string(),
+      ministere: z.enum(MINISTERES), // vocabulaire contrôlé figé (cf. lib/taxonomie.ts)
+      theme: reference('themes'), // vocabulaire extensible (collection themes)
+      sousTheme: reference('sousThemes'), // vocabulaire extensible (collection sousThemes)
     }),
     tags: z.array(z.string()), // navigation transversale
     // États POST-publication uniquement : « pas encore publié » est géré par le
@@ -63,4 +63,17 @@ const fiches = defineCollection({
   }),
 });
 
-export const collections = { fiches };
+// Vocabulaires EXTENSIBLES : chaque terme = une entrée éditable dans le CMS.
+// reference() valide au build que la fiche pointe vers un terme existant
+// (intégrité référentielle) tout en restant extensible sans toucher au code.
+const themes = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/themes' }),
+  schema: z.object({ nom: z.string() }),
+});
+
+const sousThemes = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/sous-themes' }),
+  schema: z.object({ nom: z.string() }),
+});
+
+export const collections = { fiches, themes, sousThemes };
