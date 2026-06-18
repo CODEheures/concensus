@@ -52,8 +52,25 @@ const f = entry.data;
       </div>
     </div>
 
-    <aside class="aside">
+    <aside class="aside" id="voteAside">
+      <a class="vote-back" id="voteBack" href="#">← Retour à la fiche</a>
       <PolisEmbed conversationId={f.polis.conversationId} />
     </aside>
   </div>
+
+  <script is:inline>
+    (function () {
+      var open = document.getElementById('voteOpen');
+      var back = document.getElementById('voteBack');
+      if (open)
+        open.addEventListener('click', function () {
+          document.body.classList.add('vote-open');
+        });
+      if (back)
+        back.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.body.classList.remove('vote-open');
+        });
+    })();
+  </script>
 </Base>
