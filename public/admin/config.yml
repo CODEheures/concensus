@@ -74,6 +74,7 @@ collections:
             value_field: '{{slug}}'
             search_fields: [nom]
             display_fields: [nom]
+            dropdown_threshold: 0 # toujours en menu déroulant (pas de radios)
           - name: sousTheme
             label: Sous-thème
             widget: relation
@@ -81,6 +82,7 @@ collections:
             value_field: '{{slug}}'
             search_fields: [nom]
             display_fields: [nom]
+            dropdown_threshold: 0 # toujours en menu déroulant (pas de radios)
 
       - { name: tags, label: Tags, widget: list, default: [] }
 
