@@ -1,0 +1,27 @@
+{
+  "slug": "visibilite-nocturne",
+  "conversationId": "6mzhrbjjdf",
+  "reportId": "r8umr3p7b3cdc3crsracb",
+  "generatedAt": "2026-06-18T14:16:58.400Z",
+  "seuil": 7,
+  "mesures": {
+    "1": {
+      "votes": 1,
+      "position": 0,
+      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "aboveThreshold": false
+    },
+    "2": {
+      "votes": 1,
+      "position": 0,
+      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "aboveThreshold": false
+    },
+    "3": {
+      "votes": 1,
+      "position": 0,
+      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "aboveThreshold": false
+    }
+  }
+}

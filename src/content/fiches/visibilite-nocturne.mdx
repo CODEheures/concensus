@@ -130,7 +130,7 @@ Aux Pays-Bas, la N329 à Oss a testé des « Glowing Lines » : une peinture lum
 
 Ces mesures ont été versées au débat citoyen comme propositions de départ. Voici comment les participants les situent — non pas « combien de pour », mais si elles **rassemblent** les différents groupes d'opinion ou si elles les **divisent**. L'indicateur n'apparaît qu'à partir d'un seuil de votes suffisant pour être significatif.
 
-{frontmatter.mesures.map((m) => <Mesure id={m.id} texte={m.texte} preuve={m.preuve} />)}
+{frontmatter.mesures.map((m) => <Mesure id={m.id} texte={m.texte} preuve={m.preuve} conversationId={frontmatter.polis.conversationId} commentId={m.polisCommentId} />)}
 
 <p class="foldhint" style="margin-top:14px;">Le même traitement s'applique à toutes les mesures, qu'elles plaisent ou non : la fiche rend compte du débat, elle ne défend pas ses propositions.</p>
 

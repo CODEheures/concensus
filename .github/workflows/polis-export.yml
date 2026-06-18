@@ -1,0 +1,44 @@
+name: Export Pol.is (réception)
+
+# Récupère périodiquement les compteurs/réception Pol.is et les commite.
+# Le commit déclenche un rebuild Cloudflare Pages. Sert aussi de backup 3-2-1
+# (chaque export = une version dans l'historique Git).
+on:
+  schedule:
+    - cron: '0 */6 * * *' # toutes les 6 h
+  workflow_dispatch: {} # déclenchement manuel
+
+permissions:
+  contents: write
+
+concurrency:
+  group: polis-export
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Récupérer les données Pol.is
+        run: npm run fetch:polis
+
+      - name: Commit si changement
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain src/data/polis)" ]; then
+            git add src/data/polis
+            git commit -m "chore(polis): refresh réception [skip ci]"
+            git push
+          else
+            echo "Aucun changement de réception."
+          fi

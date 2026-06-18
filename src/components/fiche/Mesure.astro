@@ -1,14 +1,21 @@
 ---
 import Reception from './Reception.astro';
 import type { ReceptionData } from './Reception.astro';
+import { getReception } from '../../lib/reception';
 
 interface Props {
   id: string;
   texte: string;
   preuve: 'eprouve' | 'emergent';
+  // Lien fiche <-> vote : on retrouve la réception via (conversationId, commentId).
+  conversationId?: string;
+  commentId?: number;
   reception?: ReceptionData;
 }
-const { id, texte, preuve, reception } = Astro.props;
+const { id, texte, preuve, conversationId, commentId } = Astro.props;
+const reception =
+  Astro.props.reception ??
+  (conversationId ? getReception(conversationId, commentId) : undefined);
 const badge =
   preuve === 'eprouve'
     ? { cls: 'eprouve', label: 'ÉPROUVÉ' }
