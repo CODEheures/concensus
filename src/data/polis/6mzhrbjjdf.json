@@ -2,25 +2,25 @@
   "slug": "visibilite-nocturne",
   "conversationId": "6mzhrbjjdf",
   "reportId": "r8umr3p7b3cdc3crsracb",
-  "generatedAt": "2026-06-19T01:18:09.827Z",
+  "generatedAt": "2026-06-19T08:05:13.398Z",
   "seuil": 7,
   "mesures": {
     "1": {
-      "votes": 1,
-      "position": 0,
-      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "votes": 2,
+      "position": 100,
+      "label": "<strong>Rassemble largement</strong> les différents groupes.",
       "aboveThreshold": false
     },
     "2": {
-      "votes": 1,
-      "position": 0,
-      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "votes": 2,
+      "position": 100,
+      "label": "<strong>Rassemble largement</strong> les différents groupes.",
       "aboveThreshold": false
     },
     "3": {
-      "votes": 1,
-      "position": 0,
-      "label": "<strong>Divise</strong> les groupes d’opinion : pas de position commune à ce stade.",
+      "votes": 2,
+      "position": 100,
+      "label": "<strong>Rassemble largement</strong> les différents groupes.",
       "aboveThreshold": false
     }
   }
